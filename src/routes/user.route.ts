@@ -30,7 +30,7 @@ class UserRoutes {
       this.Hashing.getEncryptMiddleware(),
       handleRole,
       this.UserController.signUp
-    );
+    );  
     
     //Customer or Admin registration
     this.router.post(
