@@ -13,6 +13,7 @@ class UserRoutes {
   }
 
   private routes = () => {
+
     //Customer Registration
     this.router.post(
       '',
@@ -30,11 +31,27 @@ class UserRoutes {
       handleRole,
       this.UserController.signUp
     );
-
+    
+    //Customer or Admin registration
     this.router.post(
       '/signin',
       this.UserValidator.loginValidate,
       this.UserController.login
+    )
+    
+    //Forget password 
+    this.router.post(
+      '/forget-passowrd',
+      this.UserValidator.emailValidate,
+      this.UserController.forgetPassword
+    )
+
+    //Reset Password
+
+    this.router.post(
+      '/reset-password',
+      this.UserValidator.resetPasswordValidate,
+      this.UserController.resetPassword
     )
   };
 
