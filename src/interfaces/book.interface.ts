@@ -1,4 +1,4 @@
-import { Document } from 'mongoose';
+import mongoose, { Document } from 'mongoose';
 
 export interface IBook extends Document {
   bookName: string;
@@ -8,7 +8,7 @@ export interface IBook extends Document {
   discountPrice: number;
   bookImage: string;
   quantity: number;
-  admin_user_id: string;
+  userId: mongoose.Types.ObjectId;
   createdAt?: Date;
   updatedAt?: Date;
 }
