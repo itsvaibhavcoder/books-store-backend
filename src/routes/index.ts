@@ -2,7 +2,7 @@ import express, { IRouter } from 'express';
 const router = express.Router();
 
 import userRoute from './user.route';
-
+import bookRoute from './book.routes';
 /**
  * Function contains Application routes
  *
@@ -13,7 +13,7 @@ const routes = (): IRouter => {
     res.json('Welcome vaibhav...');
   });
   router.use('/users', new userRoute().getRoutes());
-  
+  router.use('/books', new bookRoute().getRoutes());
   return router;
 };
 
