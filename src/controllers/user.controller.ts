@@ -1,126 +1,103 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import HttpStatus from 'http-status-codes';
 import userService from '../services/user.service';
-
+import { generateToken} from '../utils/tokenUtils';
 import { Request, Response, NextFunction } from 'express';
 
 class UserController {
   public UserService = new userService();
 
-  /**
-   * Controller to get all users available
-   * @param  {object} Request - request object
-   * @param {object} Response - response object
-   * @param {Function} NextFunction
-   */
-  public getAllUsers = async (
+  public signUp = async (
     req: Request,
     res: Response,
     next: NextFunction
   ): Promise<any> => {
     try {
-      const data = await this.UserService.getAllUsers();
-      res.status(HttpStatus.OK).json({
-        code: HttpStatus.OK,
-        data: data,
-        message: 'All users fetched successfully'
-      });
-    } catch (error) {
-      next(error);
-    }
-  };
-
-  /**
-   * Controller to get a user
-   * @param  {object} Request - request object
-   * @param {object} Response - response object
-   * @param {Function} NextFunction
-   */
-  public getUser = async (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ): Promise<any> => {
-    try {
-      const data = await this.UserService.getUser(req.params._id);
-      res.status(HttpStatus.OK).json({
-        code: HttpStatus.OK,
-        data: data,
-        message: 'User fetched successfully'
-      });
-    } catch (error) {
-      next(error);
-    }
-  };
-
-  /**
-   * Controller to create new user
-   * @param  {object} Request - request object
-   * @param {object} Response - response object
-   * @param {Function} NextFunction
-   */
-  public newUser = async (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ): Promise<any> => {
-    try {
-      const data = await this.UserService.newUser(req.body);
+      const user = await this.UserService.signUp(req.body);
+      const {password, ...rest_data} = user.toObject();
       res.status(HttpStatus.CREATED).json({
         code: HttpStatus.CREATED,
-        data: data,
-        message: 'User created successfully'
+        data: rest_data,
+        message: 'User Registered'
       });
     } catch (error) {
       next(error);
     }
   };
 
-  /**
-   * Controller to update a user
-   * @param  {object} Request - request object
-   * @param {object} Response - response object
-   * @param {Function} NextFunction
-   */
-  public updateUser = async (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ): Promise<any> => {
-    try {
-      const data = await this.UserService.updateUser(req.params._id, req.body);
-      res.status(HttpStatus.ACCEPTED).json({
-        code: HttpStatus.ACCEPTED,
-        data: data,
-        message: 'User updated successfully'
+  public login = async (req: Request, res: Response, next: NextFunction): Promise<void>=>{
+    try{
+      const user = await this.UserService.login(req.body.email, req.body.password);
+      if(user){
+        const generatedToken = generateToken({
+          UserID: user._id.toString(),
+          email: user.email
+        });
+        const {firstName, email, ...rest_data} = user.toObject();
+
+        res.status(HttpStatus.OK).json({
+          code: HttpStatus.OK,
+          data: {
+            firstName,
+            email,
+            generatedToken
+          },
+          message: 'User logged In'
+        });
+      }
+      else{
+        res.status(HttpStatus.BAD_REQUEST).json({
+            code: HttpStatus.BAD_REQUEST,
+            data: "",
+            message: 'Invalid Email or Password.'
+        });
+      }
+    }
+    catch(error){
+      res.status(HttpStatus.BAD_REQUEST).json({
+        code: HttpStatus.BAD_REQUEST,
+        data: "",
+        message: 'Invalid Email or Password.'
       });
-    } catch (error) {
-      next(error);
     }
   };
 
-  /**
-   * Controller to delete a single user
-   * @param  {object} Request - request object
-   * @param {object} Response - response object
-   * @param {Function} NextFunction
-   */
-  public deleteUser = async (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ): Promise<any> => {
-    try {
-      await this.UserService.deleteUser(req.params._id);
+  public forgetPassword = async(req:Request, res: Response, next: NextFunction ):Promise<void>=>{
+    try{
+      const resetToken = await this.UserService.forgetPassword(req.body.email);
       res.status(HttpStatus.OK).json({
         code: HttpStatus.OK,
-        data: {},
-        message: 'User deleted successfully'
+        message: 'reset password link sent successfully',
       });
-    } catch (error) {
-      next(error);
+    }
+    catch(error){
+      res.status(HttpStatus.BAD_REQUEST).json({
+        code: HttpStatus.BAD_REQUEST,
+        data: "",
+        message: error.message,
+      });
     }
   };
+
+  public resetPassword = async (req: Request, res: Response, next:NextFunction): Promise<void>=>{
+    try{
+      const {token, newPassword} = req.body;
+      await this.UserService.resetPassword(token, newPassword);
+      res.status(HttpStatus.OK).json({
+        code: HttpStatus.OK,
+        data: "",
+        message: 'Password reset successful',
+      });
+    }
+    catch(error){
+      res.status(HttpStatus.BAD_REQUEST).json({
+        code: HttpStatus.BAD_REQUEST,
+        data: "",
+        message: error.message,
+      });
+    }
+  };
+  
 }
 
 export default UserController;
