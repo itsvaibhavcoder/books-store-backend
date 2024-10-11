@@ -60,8 +60,44 @@ class UserController {
         message: 'Invalid Email or Password.'
       });
     }
-  }
+  };
 
+  public forgetPassword = async(req:Request, res: Response, next: NextFunction ):Promise<void>=>{
+    try{
+      const resetToken = await this.UserService.forgetPassword(req.body.email);
+      res.status(HttpStatus.OK).json({
+        code: HttpStatus.OK,
+        message: 'reset password link sent successfully',
+      });
+    }
+    catch(error){
+      res.status(HttpStatus.BAD_REQUEST).json({
+        code: HttpStatus.BAD_REQUEST,
+        data: "",
+        message: error.message,
+      });
+    }
+  };
+
+  public resetPassword = async (req: Request, res: Response, next:NextFunction): Promise<void>=>{
+    try{
+      const {token, newPassword} = req.body;
+      await this.UserService.resetPassword(token, newPassword);
+      res.status(HttpStatus.OK).json({
+        code: HttpStatus.OK,
+        data: "",
+        message: 'Password reset successful',
+      });
+    }
+    catch(error){
+      res.status(HttpStatus.BAD_REQUEST).json({
+        code: HttpStatus.BAD_REQUEST,
+        data: "",
+        message: error.message,
+      });
+    }
+  };
+  
 }
 
 export default UserController;
