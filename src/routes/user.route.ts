@@ -47,7 +47,6 @@ class UserRoutes {
     )
 
     //Reset Password
-
     this.router.post(
       '/reset-password',
       this.UserValidator.resetPasswordValidate,
