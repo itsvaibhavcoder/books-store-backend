@@ -1,6 +1,8 @@
 import User from '../models/user.model';
 import { IUser } from '../interfaces/user.interface';
 import bcrypt from 'bcrypt';
+import { generateResetToken,verifyResetToken } from '../utils/tokenUtils';
+import sendEmail from '../utils/sendEmail';
 class UserService {
 
   //Create new user (Admin or Customer)
@@ -26,6 +28,34 @@ class UserService {
     return false;
   };
 
+  //Handle forget password
+  public forgetPassword = async (email: string): Promise<string>=>{
+    const user = await User.findOne({email});
+    if(!user){
+      throw new Error('Email does not exist');
+    }
+
+    const resetToken = generateResetToken(user.email);
+    const link = `UserID-${user.id} & token - ${resetToken}`;
+    await sendEmail(user.email, link);
+    return resetToken;
+  }
+  
+  public resetPassword = async(token: string, newPassword: string): Promise<void>=>{
+    try{
+      const decoded = verifyResetToken(token) as {email: string};
+      const user = await User.findOne({email: decoded.email});
+      if(!user){
+        throw new Error('Invalid token or user does not exist');
+      }
+      const hashedPassword = await bcrypt.hash(newPassword, 10);
+      user.password = hashedPassword;
+      await user.save();
+    }
+    catch(error){
+      throw new Error('Invalid or expired token');
+    }
+  };
 }
 
 export default UserService;
