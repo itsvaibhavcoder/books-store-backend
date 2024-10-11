@@ -14,6 +14,13 @@ class UserRoutes {
 
   private routes = () => {
     this.router.post(
+      '',
+      this.UserValidator.signUpValidate,
+      handleRole,
+      this.UserController.signUp
+    ),
+    
+    this.router.post(
       '/adminsignup',
       this.UserValidator.signUpValidate,
       handleRole,
