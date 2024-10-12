@@ -1,8 +1,23 @@
-import { Document, ObjectId } from 'mongoose';
-import { IBook } from './book.interface';
+import mongoose, { Document } from 'mongoose';
+import { IBook } from './book.interface'; 
+
+export interface ICartBook {
+  _id: mongoose.Types.ObjectId;
+  bookName: string;
+  description: string;
+  price: number;
+  discountPrice: number;
+  bookImage: string;
+  quantity: number;
+  author: string;
+  userId: mongoose.Types.ObjectId;
+}
 
 export interface ICart extends Document {
-  createdBy: ObjectId;  
-  books: IBook;   
-  cartTotal: number;    
+  userId: mongoose.Types.ObjectId;
+  books: ICartBook[];
+  totalPrice: number;
+  totalDiscountPrice: number;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
