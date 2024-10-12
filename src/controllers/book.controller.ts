@@ -40,6 +40,45 @@ class BookController {
       });
     }
   };
+
+  //Update book by Id
+  public updateBook = async(req: Request, res:Response, next:NextFunction): Promise<void>=>{
+  try{
+    const bookId = req.params.id;
+    const data = await this.bookService.updateBook(bookId, req.body);
+    res.status(HttpStatus.OK).json({
+      code: HttpStatus.OK,
+      data: data,
+      message: 'Book updated successfully',
+    });
+  }
+  catch(error){
+    res.status(HttpStatus.BAD_REQUEST).json({
+      code: HttpStatus.BAD_REQUEST,
+      message: error.message,
+    });
+  }
+  };
+
+  //Delete book
+  public deleteBook = async(req:Request, res:Response, next: NextFunction):Promise<void> =>{
+    try{
+      const bookId = req.params.id;
+      const {userId} = req.body;
+      const data = await this.bookService.deleteBook(bookId, userId);
+      res.status(HttpStatus.OK).json({
+        code: HttpStatus.OK,
+        data: data,
+        message: 'Book deleted successfully',
+      });
+    }
+    catch(error){
+      res.status(HttpStatus.BAD_REQUEST).json({
+        code: HttpStatus.BAD_REQUEST,
+        message: error.message,
+      });
+    }
+  }
 }
 
 export default BookController;
