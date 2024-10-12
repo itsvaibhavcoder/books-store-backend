@@ -11,6 +11,7 @@ class BookRoutes {
   }
 
   private routes = ()=>{
+    
     //Add book 
      this.router.post(
         '/',
@@ -23,6 +24,20 @@ class BookRoutes {
      this.router.get(
         '/',
         this.BookController.getAllBooks
+     ),
+
+     //Update book by Id
+     this.router.put(
+      '/:id',
+      userAuth,
+      this.BookController.updateBook
+     ),
+
+     //Delete book by Id
+     this.router.delete(
+      '/:id',
+      userAuth,
+      this.BookController.deleteBook
      )
   }
 
