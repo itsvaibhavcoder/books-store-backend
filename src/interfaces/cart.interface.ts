@@ -1,5 +1,4 @@
 import mongoose, { Document } from 'mongoose';
-import { IBook } from './book.interface'; 
 
 export interface ICartBook {
   _id: mongoose.Types.ObjectId;

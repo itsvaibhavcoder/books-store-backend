@@ -59,7 +59,8 @@ class CartService {
 
       if (bookInCart) {
         bookInCart.quantity += 1;
-      } else {
+      } 
+      else {
         cart.books.push({
           bookName: book.bookName,
           description: book.description,

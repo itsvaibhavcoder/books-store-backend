@@ -4,7 +4,7 @@ import { Request, Response, NextFunction } from 'express';
 
 class CartController {
   public CartService = new cartService();
-
+ 
   public getAllItemFromCart = async (
     req: Request,
     res: Response,
