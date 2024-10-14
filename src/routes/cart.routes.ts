@@ -11,17 +11,18 @@ class CartRoutes {
 
   private routes = () => {
 
-     //Update Quantity
-     this.router.post(
-        '/updatequantity',
+     //Update Quantity (Pass book id in params)
+     this.router.put(
+        '/:id',
         userAuth,
         this.CartController.updateQuantity
-      );
+    );
       
     //Get all items from cart
-    this.router.get('/:id', userAuth, this.CartController.getAllItemFromCart),
-      //Add item to cart
-      this.router.post('/:id', userAuth, this.CartController.addToCart);
+    this.router.get('/', userAuth, this.CartController.getAllItemFromCart),
+
+    //Add item to cart
+    this.router.post('/:id', userAuth, this.CartController.addToCart);
 
     //Delete item from cart
     this.router.delete('/:id', userAuth, this.CartController.removeFromCart);
