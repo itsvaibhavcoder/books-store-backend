@@ -63,8 +63,9 @@ class CartController {
 
   public updateQuantity = async(req: Request, res: Response, next:NextFunction):Promise<void>=>{
     try{
-        const { bookId, userId, quantity } = req.body;
-        const data = await this.CartService.updateBookQuantity(bookId, userId, quantity);
+        const bookId = req.params.id;
+        const {userId} = req.body;
+        const data = await this.CartService.updateBookQuantity(bookId, userId);
         res.status(HttpStatus.OK).json({
             code: HttpStatus.OK,
             data,
@@ -75,7 +76,7 @@ class CartController {
         res.status(HttpStatus.BAD_REQUEST).json({
             code: HttpStatus.BAD_REQUEST,
             message: error.message
-          });
+        });
     }
   };
 
