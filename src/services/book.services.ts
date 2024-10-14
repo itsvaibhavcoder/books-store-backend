@@ -36,7 +36,7 @@ class BookService {
     if (!user) throw new Error('User not found');
     if (user.role !== 'admin')
       throw new Error('Only admin users can update books');
-    const updatedBook = await Book.findByIdAndUpdate(bookId, body, {
+     const updatedBook = await Book.findByIdAndUpdate(bookId, body, {
       new: true
     });
     if (!updatedBook) throw new Error('Book not found');
