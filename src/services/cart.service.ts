@@ -95,22 +95,9 @@ class CartService {
       throw new Error('Book not found in cart');
     }
 
-    if(bookInCart.quantity>1){
-      bookInCart.quantity -= 1;
-    }
-    else{
-      cart.books = cart.books.filter(
+    cart.books = cart.books.filter(
         (book: ICartBook) => book._id.toString() !== bookId
       );
-    }
-    cart.totalPrice = cart.books.reduce(
-      (total, book) => total + book.price * book.quantity,
-      0
-    );
-    cart.totalDiscountPrice = cart.books.reduce(
-      (total, book) => total + book.discountPrice * book.quantity,
-      0
-    );
     await cart.save();
     return cart;
    };
