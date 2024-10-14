@@ -1,52 +1,63 @@
-import { Request, Response } from 'express';
-import HttpStatus from 'http-status-codes';
-import OrderService from '../services/order.service';  
 
-class OrderController {
-  public getOrderSummary = async (req: Request, res: Response): Promise<Response> => {
-    const { userId } = req.body;
+// import { Request, Response } from 'express';
+// import OrderService from '../services/order.service';
 
-    try {
-      const orders = await OrderService.getOrderSummary(userId);
-      if (!orders) {
-        return res.status(HttpStatus.NOT_FOUND).json({
-          code: HttpStatus.NOT_FOUND,
-          message: 'No orders found for this user',
-        });
-      }
+// class OrderController {
+//   // Create a new order
+//   public createOrder = async (req: Request, res: Response): Promise<Response> => {
+//     try {
+//       const { userId, paymentMethod, addressId } = req.body;
+//       const order = await OrderService.createOrder(userId, paymentMethod, addressId);
+//       return res.status(201).json({ message: 'Order created successfully', order });
+//     } catch (error: any) {
+//       return res.status(400).json({ message: error.message });
+//     }
+//   };
 
-      return res.status(HttpStatus.OK).json({
-        code: HttpStatus.OK,
-        data: orders,
-        message: 'Order summary retrieved successfully',
-      });
-    } 
-    catch (error) {
-      return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
-        code: HttpStatus.INTERNAL_SERVER_ERROR,
-        message: 'An error occurred while fetching order summary',
-      });
-    }
-  };
+//   // Get order by ID
+//   public getOrderById = async (req: Request, res: Response): Promise<Response> => {
+//     try {
+//       const { orderId } = req.params;
+//       const order = await OrderService.getOrderById(orderId);
+//       return res.status(200).json({ order });
+//     } catch (error: any) {
+//       return res.status(404).json({ message: error.message });
+//     }
+//   };
 
-public createOrder = async (req: Request, res: Response): Promise<Response> => {
-    const { userId, bookIds, totalAmount } = req.body;
+//   // Get all orders for a user
+//   public getOrdersByUser = async (req: Request, res: Response): Promise<Response> => {
+//     try {
+//       const { userId } = req.params;
+//       const orders = await OrderService.getOrdersByUser(userId);
+//       return res.status(200).json({ orders });
+//     } catch (error: any) {
+//       return res.status(404).json({ message: error.message });
+//     }
+//   };
 
-    try {
-      const newOrder = await OrderService.createOrder(userId, bookIds, totalAmount);
-      return res.status(HttpStatus.CREATED).json({
-        code: HttpStatus.CREATED,
-        data: newOrder,
-        message: 'Order created successfully',
-      });
-    } 
-    catch (error) {
-      return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
-        code: HttpStatus.INTERNAL_SERVER_ERROR,
-        message: 'An error occurred while creating the order',
-      });
-    }
-  };
-}
+//   // Update order status
+//   public updateOrderStatus = async (req: Request, res: Response): Promise<Response> => {
+//     try {
+//       const { orderId } = req.params;
+//       const { status } = req.body;
+//       const order = await OrderService.updateOrderStatus(orderId, status);
+//       return res.status(200).json({ message: 'Order status updated successfully', order });
+//     } catch (error: any) {
+//       return res.status(404).json({ message: error.message });
+//     }
+//   };
 
-export default OrderController;
+//   // Delete an order
+//   public deleteOrder = async (req: Request, res: Response): Promise<Response> => {
+//     try {
+//       const { orderId } = req.params;
+//       await OrderService.deleteOrder(orderId);
+//       return res.status(200).json({ message: 'Order deleted successfully' });
+//     } catch (error: any) {
+//       return res.status(404).json({ message: error.message });
+//     }
+//   };
+// }
+
+// export default OrderController;
