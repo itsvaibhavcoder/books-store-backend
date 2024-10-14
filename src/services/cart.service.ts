@@ -85,12 +85,24 @@ class CartService {
     userId: string
   ): Promise<ICart> => {
     const cart = await Cart.findOne({ userId });
+    console.log(cart);
     if (!cart) {
       throw new Error('Cart not found');
     }
-    cart.books = cart.books.filter(
-      (book: ICartBook) => book._id.toString() !== bookId
-    );
+    const bookInCart = cart.books.find((book:ICartBook)=> book._id.toString()===bookId);
+
+    if(!bookInCart){
+      throw new Error('Book not found in cart');
+    }
+
+    if(bookInCart.quantity>1){
+      bookInCart.quantity -= 1;
+    }
+    else{
+      cart.books = cart.books.filter(
+        (book: ICartBook) => book._id.toString() !== bookId
+      );
+    }
     cart.totalPrice = cart.books.reduce(
       (total, book) => total + book.price * book.quantity,
       0
@@ -101,12 +113,11 @@ class CartService {
     );
     await cart.save();
     return cart;
-  };
+   };
 
   public updateBookQuantity = async (
     bookId: string,
-    userId: string,
-    quantity: number
+    userId: string
   ): Promise<ICart> => {
     const cart = await Cart.findOne({ userId });
     if (!cart) {
@@ -119,7 +130,7 @@ class CartService {
     if (!bookInCart) {
       throw new Error('Book not found in cart');
     }
-    bookInCart.quantity = quantity;
+    bookInCart.quantity +=1;
     cart.totalPrice = cart.books.reduce(
       (total, book) => total + book.price * book.quantity,
       0
