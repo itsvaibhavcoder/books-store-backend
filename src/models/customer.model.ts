@@ -24,7 +24,7 @@ const customerSchema = new Schema<ICustomer>({
     required: true,
   },
   addresses: {
-    type: [addressSchema], // Embedding the address schema
+    type: [addressSchema],
     default: [],
   },
 }, { timestamps: true });
