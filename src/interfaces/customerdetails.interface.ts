@@ -6,7 +6,7 @@ interface IAddress {
   city: string;
   state: string;
   postalCode: string;
-  isDefault: boolean;
+  isDefault: boolean; 
 }
 
 export interface ICustomer extends Document {
@@ -14,5 +14,5 @@ export interface ICustomer extends Document {
   email: string;
   fullName: string;
   contact: number;
-  addresses: IAddress[];  
+  addresses: IAddress[]; 
 }
