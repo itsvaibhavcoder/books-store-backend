@@ -1,26 +1,12 @@
-import { Document, ObjectId } from 'mongoose';
+import mongoose, { Document } from 'mongoose';
+import { ICartBook } from './cart.interface'; 
 
 export interface IOrder extends Document {
-  userId: ObjectId;
-  books: Array<{
-    bookName: string;
-    description: string;
-    price: number;
-    discountPrice: number;
-    bookImage: string;
-    quantity: number;
-    author: string;
-    userId: ObjectId;
-  }>;
+  orderId: mongoose.Types.ObjectId;
+  books: ICartBook[];
   totalPrice: number;
   totalDiscountPrice: number;
-  shippingAddress: {
-    addressLine: string;
-    city: string;
-    state: string;
-    postalCode: string;
-  };
-  paymentMethod: string;
-  status: 'pending' | 'shipped' | 'delivered' | 'cancelled';
+  orderStatus: boolean;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
-
