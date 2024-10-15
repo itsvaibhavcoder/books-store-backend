@@ -4,7 +4,7 @@ import CustomerService from '../services/customer.services';
 class CustomerController {
   private customerService = new CustomerService();
 
-  // Get customer details
+  //Get customer details
   public getCustomerDetails = async (req: Request, res: Response): Promise<Response> => {
     try {
       const customerId = req.params.id;
@@ -18,7 +18,7 @@ class CustomerController {
     }
   };
 
-  // Add new customer
+  //Add new customer
   public addCustomer = async (req: Request, res: Response): Promise<Response> => {
     try {
       const customerData = req.body;
@@ -29,7 +29,7 @@ class CustomerController {
     }
   };
 
-  // Add address to customer
+  //Add address to customer
   public addAddress = async (req: Request, res: Response): Promise<Response> => {
     try {
       const customerId = req.params.id;
